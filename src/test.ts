@@ -14,55 +14,50 @@ const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
 
-// (async () => {
-//   const listUsersresponse = await notion.users.list({});
-//   console.log(listUsersresponse);
-// })();
-
-// async function getAllIDPage(auth: string):
-
-// https://www.notion.so/shreypandya/Sandbox-71aad8e7270847d2bfa9ced0f913e6f0?pvs=4
+const n2m = new NotionToMarkdown({ notionClient: notion });
 
 async function getAllPageIds() {
-  const { results } = await notion.search({});
+  const { results } = await notion.search({
+    filter: {
+      value: "page",
+      property: "object",
+    }
+  });
 
-  const pages = results.filter(
-    (result) =>
-      result.object === "page" &&
-      //@ts-ignore
-      result.parent.type === "workspace" &&
-      //@ts-ignore
-      result.parent.workspace === true
-  );
-
-  console.log(pages)
-
-  const pageIds = pages.map((page) => page.id);  
+  const pageIds = results.map((page) => page.id);  
   return pageIds;
 }
 
-// async function getPages(): Promise <Page[]> {
-//     const pageIds = await getAllPageIds();
+async function getAllPageContent(pageIds: string[]) {
+  const pageContent = [];
+  
+  for (const id of pageIds) {
+    const mdBlocks = await n2m.pageToMarkdown(id);
+    const mdString = n2m.toMarkdownString(mdBlocks);
+    pageContent.push(mdString);
+  }
 
-//   // loop over each page ID and call getPageContent() on each
-//     const pages = await getAllPageContent(pageIds);
-    
-//     return pages;
-// }
+  return pageContent;
+}
 
 
-// const notion = new Client({
-//   auth: process.env.NOTION_API_KEY,
-// });
+async function getPages(): Promise <Page[]> {
+    const pageIds = await getAllPageIds();
+    console.log({ pageIds });
 
-// // passing notion client to the option
-// const n2m = new NotionToMarkdown({ notionClient: notion });
+  // loop over each page ID and call getPageContent() on each
+    const pages = await getAllPageContent(pageIds);
+    console.log({ pages });
 
-// (async () => {
-//   const mdblocks = await n2m.pageToMarkdown("target_page_id");
-//   const mdString = n2m.toMarkdownString(mdblocks);
-// })();
+    // debugging! 
+    // console.log(pages.length);
+    //pages.forEach(str => console.log(str));
 
+    return pages;
+}
+
+
+// For testing
 (async () => {
-  await getAllPageIds()
+  await getPages()
 })();
