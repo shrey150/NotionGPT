@@ -1,0 +1,29 @@
+{
+  "name": "notion-neural-search",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@notionhq/client": "^2.2.5",
+    "dotenv": "^16.0.3",
+    "notion-to-md": "^2.5.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrey150/notion-neural-search.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shrey150/notion-neural-search/issues"
+  },
+  "homepage": "https://github.com/shrey150/notion-neural-search#readme"
+}
