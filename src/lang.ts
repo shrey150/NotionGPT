@@ -34,14 +34,45 @@ export const run = async () => {
     */
 };
   
-  
+export const loadVecStore = () => {
+    return HNSWLib.load(
+        process.env.VEC_STORE_DIR,
+        new OpenAIEmbeddings()
+    );
+}
+
 export const genVecStore = async (pages: string[]) => {
     const textSplitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000 });
     const docs = await textSplitter.createDocuments(pages);
 
-    console.log(docs);
+    console.log('Number of chunks: ', docs.length);
 
-    // Create a vector store from the documents. This is curretly in memory
-    //const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
-    //return vectorStore;
+    // Create a vector store from the documents. This is currently in memory
+    const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
+    return vectorStore;
+
+    /*
+    export const run = async () => {
+  // Create a vector store through any method, here from texts as an example
+  const vectorStore = await HNSWLib.fromTexts(
+    ["Hello world", "Bye bye", "hello nice world"],
+    [{ id: 2 }, { id: 1 }, { id: 3 }],
+    new OpenAIEmbeddings()
+  );
+
+  // Save the vector store to a directory
+  const directory = "your/directory/here";
+  await vectorStore.save(directory);
+
+  // Load the vector store from the same directory
+  const loadedVectorStore = await HNSWLib.load(
+    directory,
+    new OpenAIEmbeddings()
+  );
+
+  // vectorStore and loadedVectorStore are identical
+
+  const result = await loadedVectorStore.similaritySearch("hello world", 1);
+  console.log(result);
+  */
 }
