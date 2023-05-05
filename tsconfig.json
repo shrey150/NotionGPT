@@ -7,4 +7,5 @@
         "outDir": "dist",
     },
     "include": ["src/**/*"],
+    "exclude": ["src/lang.ts"]  // TODO remove
 }

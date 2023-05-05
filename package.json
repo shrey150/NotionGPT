@@ -6,14 +6,17 @@
   "dependencies": {
     "@notionhq/client": "^2.2.5",
     "dotenv": "^16.0.3",
-    "notion-to-md": "^2.5.6"
+    "hnswlib-node": "^1.4.2",
+    "langchain": "^0.0.69",
+    "notion-to-md": "^2.5.6",
+    "typeorm": "^0.3.15"
   },
   "devDependencies": {
     "typescript": "^5.0.4"
   },
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node dist/test.js"
+    "start": "npm run build && node dist/main.js"
   },
   "repository": {
     "type": "git",
